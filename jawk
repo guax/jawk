@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/node
 
 var vm = require("vm");
 
@@ -18,6 +18,10 @@ if (process.stdin.isTTY) {
     process.exit(1);
 }
 
+// Run as long as there is stdin
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+
 var chunk_buffer = "";
 
 process.stdin.on('data', function stdin_parse(input) {
@@ -29,10 +33,9 @@ process.stdin.on('data', function stdin_parse(input) {
     var entity;
 
     for (var i = 0; i < chunks.length; i++) {
-        if (i == chunks.length && chunks[i]) {
+        if (i == chunks.length -1) {
             // means we have a possibly incomplete chunk
             chunk_buffer = chunks[i];
-            console.log("incomplete chunks");
             break;
         }
         entity = JSON.parse(chunks[i]);
@@ -48,5 +51,10 @@ process.stdin.on('end', function() {
     }
 });
 
-// Run as long as there is stdin
-process.stdin.resume();
+process.on('SIGINT', function() {
+    /**
+     * For now we do a clean exit, later on we should check
+     * for usable entity in buffer as it is.
+     */
+    process.exit(1);
+});
