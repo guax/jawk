@@ -1,0 +1,52 @@
+#!/usr/local/bin/node
+
+var vm = require("vm");
+
+function eval_user_command(command_string) {
+    var preffix = "var user_command = function user_command(d) {"
+    var suffix = "}";
+    // I like to live dangerously.
+    eval(preffix + command_string + suffix);
+    return user_command;
+}
+
+var command_string = process.argv[2];
+var user_command = eval_user_command(command_string);
+
+if (process.stdin.isTTY) {
+    console.error("ERROR: We just work on PIPE'd inputs, not TTY.");
+    process.exit(1);
+}
+
+var chunk_buffer = "";
+
+process.stdin.on('data', function stdin_parse(input) {
+    // joining buffer
+    input = chunk_buffer + input;
+    chunk_buffer = "";
+
+    var chunks = input.toString().split("\n");
+    var entity;
+
+    for (var i = 0; i < chunks.length; i++) {
+        if (i == chunks.length && chunks[i]) {
+            // means we have a possibly incomplete chunk
+            chunk_buffer = chunks[i];
+            console.log("incomplete chunks");
+            break;
+        }
+        entity = JSON.parse(chunks[i]);
+        console.log(JSON.stringify(user_command(entity)));
+    }
+});
+
+process.stdin.on('end', function() {
+    // process whats left on the buffer
+    if (chunk_buffer) {
+        entity = JSON.parse(chunk_buffer);
+        console.log(JSON.stringify(user_command(entity)));
+    }
+});
+
+// Run as long as there is stdin
+process.stdin.resume();
