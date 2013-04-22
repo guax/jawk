@@ -34,7 +34,7 @@ process.stdin.on('data', function stdin_parse(input) {
 
     for (var i = 0; i < chunks.length; i++) {
         if (i == chunks.length -1) {
-            // means we have a possibly incomplete chunk
+            // aways save the last chunk, it might be incomplete
             chunk_buffer = chunks[i];
             break;
         }
