@@ -5,6 +5,8 @@ For this v0 we are running on one json entity per line. This
 need to change to, sequence of json separated by whitespace, line break
 or nothing at all. This problem might be better fixed using a lexer.
 
+**Dependencies:** node.js
+
 Concept
 =======
 
