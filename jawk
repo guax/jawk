@@ -54,7 +54,7 @@ process.stdin.on('end', function() {
 process.on('SIGINT', function() {
     /**
      * For now we do a clean exit, later on we should check
-     * for usable entity in buffer as it is.
+     * for usable entities in the buffer.
      */
     process.exit(1);
 });
