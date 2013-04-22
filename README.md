@@ -33,6 +33,6 @@ For v2
 ------
 
 AWK notation
-jawk '(d.stuff=="something") { return d }'
 
-jawk '{SUM+=d.price;} END { return "Average Price: " + SUM/NR }'
+    jawk '(d.stuff=="something") { return d }'
+    jawk '{SUM+=d.price;} END { return "Average Price: " + SUM/NR }'
