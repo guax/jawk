@@ -38,8 +38,13 @@ process.stdin.on('data', function stdin_parse(input) {
             chunk_buffer = chunks[i];
             break;
         }
+
         entity = JSON.parse(chunks[i]);
-        console.log(JSON.stringify(user_command(entity)));
+        var result = user_command(entity);
+
+        if (type(result) !== "undefined") {
+            console.log(JSON.stringify(result));
+        }
     }
 });
 
