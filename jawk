@@ -42,7 +42,7 @@ process.stdin.on('data', function stdin_parse(input) {
         entity = JSON.parse(chunks[i]);
         var result = user_command(entity);
 
-        if (type(result) !== "undefined") {
+        if (typeof result !== "undefined") {
             console.log(JSON.stringify(result));
         }
     }
